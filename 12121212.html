@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — Fitness Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F7F9;
+  --surface:#FFFFFF;
+  --surface-2:#F1F2F5;
+  --border:#E7E9ED;
+  --text:#14151A;
+  --text-2:#6B7280;
+  --text-3:#9CA3AF;
+
+  --brand:#1FAE5C;
+  --brand-dark:#158A49;
+  --brand-tint:#E7F8EE;
+
+  --accent:#FF5A1F;
+  --accent-tint:#FFEEE6;
+
+  --water:#2E90FA;
+  --water-tint:#E9F3FF;
+
+  --protein:#EC4899;
+  --carbs:#F59E0B;
+  --fat:#8B5CF6;
+
+  --sidebar:#12151C;
+  --sidebar-2:#1B1F29;
+  --sidebar-text:#A2A8B5;
+  --sidebar-text-active:#FFFFFF;
+
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:22px;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.06);
+  --shadow-md:0 4px 16px rgba(16,24,40,.08);
+  --shadow-lg:0 12px 32px rgba(16,24,40,.12);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+ul{list-style:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+svg{display:block;flex-shrink:0}
+
+.app{display:flex;min-height:100vh}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  width:264px;flex-shrink:0;background:var(--sidebar);
+  display:flex;flex-direction:column;padding:24px 16px;position:sticky;top:0;height:100vh;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 28px;}
+.brand-mark{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--brand),#0E7A3E);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;
+}
+.brand-name{color:#fff;font-weight:800;font-size:17px;letter-spacing:-.02em}
+.brand-sub{color:var(--sidebar-text);font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+
+.nav-section-label{color:#5B6070;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:0 10px;margin:18px 0 8px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav-item{
+  display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;
+  color:var(--sidebar-text);font-size:14px;font-weight:500;transition:background .15s,color .15s;
+}
+.nav-item svg{width:19px;height:19px;stroke:currentColor}
+.nav-item:hover{background:var(--sidebar-2);color:#fff}
+.nav-item.active{background:var(--brand);color:#fff}
+.nav-item .badge{margin-left:auto;background:rgba(255,255,255,.15);font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px}
+
+.sidebar-footer{margin-top:auto}
+.streak-card{
+  background:var(--sidebar-2);border-radius:16px;padding:14px;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.streak-card .flame{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#FF9142,var(--accent));display:flex;align-items:center;justify-content:center;font-size:17px}
+.streak-num{color:#fff;font-weight:800;font-size:15px;line-height:1.2}
+.streak-label{color:var(--sidebar-text);font-size:11.5px}
+
+.profile-mini{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px}
+.profile-mini:hover{background:var(--sidebar-2)}
+.avatar{
+  width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4F8CFF,#2E90FA);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0;
+}
+.profile-mini-name{color:#fff;font-size:13.5px;font-weight:600}
+.profile-mini-role{color:var(--sidebar-text);font-size:11.5px}
+
+/* ---------- Main ---------- */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 36px;position:sticky;top:0;background:rgba(246,247,249,.85);backdrop-filter:blur(10px);z-index:20;
+}
+.greeting{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.greeting-sub{color:var(--text-2);font-size:13.5px;margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.search-box{
+  display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:9px 14px;width:230px;color:var(--text-3);font-size:13.5px;
+}
+.search-box svg{width:16px;height:16px;stroke:var(--text-3)}
+.icon-btn{
+  width:38px;height:38px;border-radius:11px;background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.icon-btn svg{width:18px;height:18px;stroke:var(--text-2)}
+.dot-badge{position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:2px solid var(--surface)}
+
+.content{padding:0 36px 48px;flex:1}
+
+.view{display:none}
+.view.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.page-head{margin-bottom:22px}
+.page-title{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.page-desc{color:var(--text-2);font-size:14px;margin-top:4px}
+
+/* ---------- Cards / generic ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:12px;
+  font-size:13.5px;font-weight:600;transition:transform .12s,opacity .12s;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-dark)}
+.btn-ghost{background:var(--surface-2);color:var(--text)}
+.btn-ghost:hover{background:var(--border)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-sm{padding:7px 13px;font-size:12.5px;border-radius:10px}
+.btn-block{width:100%}
+
+/* ---------- Dashboard ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.stat-card{padding:20px;display:flex;flex-direction:column;gap:10px}
+.stat-top{display:flex;align-items:center;justify-content:space-between}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.stat-icon svg{width:18px;height:18px}
+.stat-value{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.stat-label{color:var(--text-2);font-size:12.5px;font-weight:500}
+.stat-trend{font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:8px}
+.trend-up{color:var(--brand);background:var(--brand-tint)}
+.trend-flat{color:var(--text-2);background:var(--surface-2)}
+
+.dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}
+.section-card{padding:22px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:15.5px;font-weight:700}
+.section-link{font-size:12.5px;font-weight:600;color:var(--brand)}
+
+.today-plan-item{
+  display:flex;align-items:center;gap:12px;padding:12px 10px;border-radius:12px;transition:background .15s;
+}
+.today-plan-item:hover{background:var(--surface-2)}
+.chk{
+  width:22px;height:22px;border-radius:7px;border:1.8px solid var(--border);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:.15s;
+}
+.chk svg{width:13px;height:13px;stroke:#fff;opacity:0}
+.chk.done{background:var(--brand);border-color:var(--brand)}
+.chk.done svg{opacity:1}
+.plan-item-name{font-size:13.5px;font-weight:600}
+.plan-item-name.done{text-decoration:line-through;color:var(--text-3)}
+.plan-item-meta{font-size:12px;color:var(--text-2);margin-top:1px}
+.plan-item-cal{margin-left:auto;font-size:12px;font-weight:600;color:var(--text-2)}
+
+.macro-row{display:flex;flex-direction:column;gap:14px}
+.macro-item{display:flex;flex-direction:column;gap:6px}
+.macro-top{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600}
+.macro-bar{height:8px;border-radius:20px;background:var(--surface-2);overflow:hidden}
+.macro-bar-fill{height:100%;border-radius:20px;transition:width .5s ease}
+
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0}
+.ring-value{font-size:20px;font-weight:800}
+.ring-sub{font-size:12px;color:var(--text-2)}
+
+/* ---------- Coach ---------- */
+.coach-hero{
+  background:linear-gradient(120deg,#12151C,#1B1F29 60%, #14351F);
+  border-radius:var(--radius-lg);padding:26px 28px;color:#fff;display:flex;align-items:center;
+  justify-content:space-between;gap:24px;margin-bottom:22px;flex-wrap:wrap;
+}
+.coach-hero-left{display:flex;align-items:center;gap:16px}
+.coach-avatar{
+  width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--brand),#0E7A3E);
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;
+}
+.coach-hero-title{font-size:17px;font-weight:700}
+.coach-hero-sub{font-size:13px;color:#B7BCC7;margin-top:3px;max-width:420px}
+
+.filter-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.filter-chip{
+  padding:8px 15px;border-radius:20px;background:var(--surface);border:1px solid var(--border);
+  font-size:13px;font-weight:600;color:var(--text-2);
+}
+.filter-chip.active{background:var(--text);color:#fff;border-color:var(--text)}
+
+.workout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.workout-card{padding:20px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.workout-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.workout-top{display:flex;align-items:center;justify-content:space-between}
+.workout-emoji{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.workout-name{font-size:15px;font-weight:700;margin-top:2px}
+.workout-tags{display:flex;gap:6px;flex-wrap:wrap}
+.workout-meta{display:flex;gap:14px;font-size:12px;color:var(--text-2);font-weight:500}
+.workout-meta span{display:flex;align-items:center;gap:5px}
+.workout-meta svg{width:13px;height:13px;stroke:var(--text-3)}
+.workout-complete-tag{font-size:11px;font-weight:700;color:var(--brand)}
+
+/* Coach chat */
+.chat-card{margin-top:22px;padding:0;overflow:hidden}
+.chat-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.chat-head-dot{width:8px;height:8px;border-radius:50%;background:var(--brand)}
+.chat-body{padding:18px 20px;display:flex;flex-direction:column;gap:12px;max-height:280px;overflow-y:auto}
+.msg{max-width:72%;padding:11px 14px;border-radius:16px;font-size:13.5px;line-height:1.45}
+.msg.coach{background:var(--surface-2);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.user{background:var(--brand);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.quick-replies{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 16px}
+.quick-reply{padding:7px 13px;border-radius:20px;border:1.3px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-2)}
+.quick-reply:hover{border-color:var(--brand);color:var(--brand)}
+.chat-input-row{display:flex;gap:10px;padding:14px 20px;border-top:1px solid var(--border)}
+.chat-input{flex:1;background:var(--surface-2);border:none;border-radius:12px;padding:11px 14px;font-size:13.5px}
+.chat-send{width:40px;height:40px;border-radius:12px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-send svg{width:17px;height:17px;stroke:#fff}
+
+/* ---------- Recipes ---------- */
+.recipe-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.recipe-card{cursor:pointer;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.recipe-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.recipe-media{height:110px;display:flex;align-items:center;justify-content:center;font-size:38px}
+.recipe-body{padding:16px}
+.recipe-name{font-size:14.5px;font-weight:700;margin-bottom:6px}
+.recipe-meta{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);margin-bottom:10px}
+.recipe-macros{display:flex;gap:6px}
+.macro-tag{font-size:10.5px;font-weight:700;padding:3px 7px;border-radius:7px}
+.macro-tag.p{background:#FDE8F3;color:var(--protein)}
+.macro-tag.c{background:#FEF3E0;color:var(--carbs)}
+.macro-tag.f{background:#F1EBFE;color:var(--fat)}
+
+/* ---------- Water ---------- */
+.water-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:16px}
+.water-ring-card{padding:30px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.svg-ring{position:relative;width:200px;height:200px}
+.svg-ring svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-center .big{font-size:28px;font-weight:800}
+.ring-center .small{font-size:12.5px;color:var(--text-2);margin-top:2px}
+.quick-add-row{display:flex;gap:10px;width:100%}
+.quick-add-btn{
+  flex:1;padding:12px;border-radius:14px;background:var(--water-tint);color:var(--water);
+  font-weight:700;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.quick-add-btn svg{width:16px;height:16px;stroke:var(--water)}
+.custom-add-row{display:flex;gap:8px;width:100%}
+.custom-add-row input{flex:1;padding:11px 14px;border-radius:12px;border:1.3px solid var(--border);font-size:13.5px}
+
+.log-list{display:flex;flex-direction:column;gap:2px;max-height:230px;overflow-y:auto}
+.log-item{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--border)}
+.log-item:last-child{border-bottom:none}
+.log-drop{width:32px;height:32px;border-radius:9px;background:var(--water-tint);display:flex;align-items:center;justify-content:center}
+.log-drop svg{width:15px;height:15px;stroke:var(--water)}
+.log-amount{font-size:13.5px;font-weight:700}
+.log-time{font-size:11.5px;color:var(--text-2)}
+.log-del{margin-left:auto;color:var(--text-3);font-size:16px;line-height:1;padding:4px}
+.log-del:hover{color:var(--accent)}
+.empty-log{color:var(--text-3);font-size:13px;text-align:center;padding:24px 0}
+
+.week-chart{display:flex;align-items:flex-end;gap:10px;height:120px;margin-top:6px}
+.week-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;height:100%}
+.week-bar-track{flex:1;width:100%;display:flex;align-items:flex-end;background:var(--surface-2);border-radius:8px;overflow:hidden}
+.week-bar-fill{width:100%;background:var(--water);border-radius:8px 8px 0 0;transition:height .4s ease}
+.week-label{font-size:11px;color:var(--text-2);font-weight:600}
+
+/* ---------- Profile ---------- */
+.profile-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:16px}
+.profile-card{padding:26px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.avatar-lg{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#4F8CFF,#2E90FA);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:30px;margin-bottom:6px}
+.profile-name{font-size:17px;font-weight:800}
+.profile-email{font-size:12.5px;color:var(--text-2)}
+.profile-stats{display:flex;width:100%;margin-top:18px;padding-top:18px;border-top:1px solid var(--border)}
+.profile-stats div{flex:1}
+.profile-stats .num{font-size:17px;font-weight:800}
+.profile-stats .lbl{font-size:11px;color:var(--text-2);margin-top:2px}
+
+.form-row{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.form-row label{font-size:12.5px;font-weight:600;color:var(--text-2)}
+.form-row input{padding:11px 14px;border-radius:12px;border:1.3px solid var(--border);font-size:13.5px}
+.form-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ---------- Modal ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(15,17,22,.55);display:none;align-items:center;justify-content:center;
+  z-index:100;padding:24px;backdrop-filter:blur(2px);
+}
+.overlay.active{display:flex}
+.modal{background:var(--surface);border-radius:24px;width:100%;max-width:520px;max-height:86vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-head{padding:22px 24px 0}
+.modal-close{position:absolute;top:20px;right:20px;width:34px;height:34px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center}
+.modal-close svg{width:15px;height:15px;stroke:var(--text-2)}
+.modal-media{height:140px;margin:20px 24px 0;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:48px}
+.modal-body{padding:20px 24px 26px}
+.modal-title{font-size:19px;font-weight:800;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--text-2);margin-bottom:16px}
+.modal-macro-row{display:flex;gap:10px;margin-bottom:20px}
+.modal-macro{flex:1;background:var(--surface-2);border-radius:14px;padding:12px;text-align:center}
+.modal-macro .v{font-size:16px;font-weight:800}
+.modal-macro .l{font-size:10.5px;color:var(--text-2);font-weight:600;margin-top:2px}
+.modal-section-title{font-size:13px;font-weight:700;margin:18px 0 8px}
+.ingredient-list li,.step-list li{font-size:13.5px;color:var(--text);padding:6px 0;border-bottom:1px dashed var(--border);display:flex;gap:10px}
+.ingredient-list li:last-child,.step-list li:last-child{border-bottom:none}
+.step-list li{align-items:flex-start}
+.step-num{width:20px;height:20px;border-radius:6px;background:var(--brand-tint);color:var(--brand);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+.exercise-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.exercise-row:last-child{border-bottom:none}
+.exercise-name{font-size:13.5px;font-weight:600}
+.exercise-sets{font-size:12px;color:var(--text-2);margin-top:1px}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:var(--text);color:#fff;padding:13px 20px;border-radius:14px;font-size:13.5px;font-weight:600;
+  display:flex;align-items:center;gap:10px;z-index:200;transition:.25s;pointer-events:none;box-shadow:var(--shadow-lg);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast svg{width:16px;height:16px;stroke:var(--brand)}
+
+.mobile-nav{display:none}
+
+/* Laptop with sidebar — 4-across grids get cramped */
+@media (max-width:1360px){
+  .recipe-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:1180px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .workout-grid{grid-template-columns:repeat(2,1fr)}
+}
+/* Tablet — two-column layouts stack */
+@media (max-width:1100px){
+  .content{padding:0 24px 40px}
+  .topbar{padding:20px 24px}
+  .dash-grid,.water-grid,.profile-grid{grid-template-columns:1fr}
+  .recipe-grid{grid-template-columns:repeat(2,1fr)}
+  .sidebar{width:232px}
+  .search-box{width:170px}
+  .greeting{font-size:20px}
+}
+/* Phone — sidebar swaps for bottom nav */
+@media (max-width:760px){
+  .sidebar{display:none}
+  .content{padding:0 16px 96px}
+  .topbar{padding:16px;position:static;background:transparent;backdrop-filter:none}
+  .search-box{display:none}
+  .greeting{font-size:19px}
+  .page-title{font-size:22px}
+  .stat-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .stat-card{padding:16px}
+  .stat-value{font-size:21px}
+  .workout-grid,.recipe-grid{grid-template-columns:1fr 1fr}
+  .coach-hero{padding:22px 20px}
+  .coach-hero>.btn{width:100%}
+  .msg{max-width:85%}
+  .chat-body{max-height:320px}
+  .overlay{padding:14px}
+  .section-card{padding:18px}
+  .mobile-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--sidebar);z-index:50;
+    padding:10px 8px calc(10px + env(safe-area-inset-bottom));justify-content:space-around;
+  }
+  .mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--sidebar-text);font-size:10px;font-weight:600;padding:6px 10px;border-radius:10px}
+  .mobile-nav-item svg{width:19px;height:19px;stroke:currentColor}
+  .mobile-nav-item.active{color:#fff}
+}
+/* Small phone — single-column cards, stacked form fields */
+@media (max-width:560px){
+  .workout-grid,.recipe-grid{grid-template-columns:1fr}
+  .recipe-media{height:130px}
+  .form-two{grid-template-columns:1fr}
+  .modal-macro-row{flex-wrap:wrap}
+  .modal-macro{flex:1 1 calc(50% - 10px)}
+  .modal-body{padding:18px 18px 22px}
+  .modal-media{margin:18px 18px 0}
+  .filter-chip{padding:7px 12px;font-size:12.5px}
+}
+@media (max-width:340px){
+  .stat-grid{grid-template-columns:1fr}
+  .quick-add-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">P</div>
+      <div>
+        <div class="brand-name">Pulse</div>
+        <div class="brand-sub">Fitness Platform</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">Menu</div>
+    <nav class="nav" id="nav">
+      <a class="nav-item active" data-view="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" data-view="coach">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Coach
+      </a>
+      <a class="nav-item" data-view="recipes">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V3M8 12v9M18 3c-1.7 0-3 2.2-3 5s1.3 5 3 5v9"/></svg>
+        Recipes
+      </a>
+      <a class="nav-item" data-view="water">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s7 8.2 7 12.5A7 7 0 0 1 5 15.5C5 11.2 12 3 12 3Z"/></svg>
+        Water
+        <span class="badge" id="nav-water-badge">0%</span>
+      </a>
+      <a class="nav-item" data-view="profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>
+        Profile
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="streak-card">
+        <div class="flame">🔥</div>
+        <div>
+          <div class="streak-num" id="streak-num">0 day streak</div>
+          <div class="streak-label">Keep the momentum</div>
+        </div>
+      </div>
+      <div class="profile-mini">
+        <div class="avatar">RH</div>
+        <div>
+          <div class="profile-mini-name">Rijad H.</div>
+          <div class="profile-mini-role">Free plan</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <div class="greeting" id="greeting-text">Good morning, Rijad 👋</div>
+        <div class="greeting-sub" id="greeting-date">—</div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          Search workouts, recipes…
+        </div>
+        <button class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="dot-badge"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="view active" id="view-dashboard">
+        <div class="page-head">
+          <div class="page-title">Dashboard</div>
+          <div class="page-desc">Your training, nutrition and hydration — all in one place.</div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="card stat-card">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:var(--brand-tint)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 4-2 6-2 6h16s-2-2-2-6"/></svg></div>
+              <span class="stat-trend trend-up" id="dash-cal-trend">on track</span>
+            </div>
+            <div class="stat-value" id="dash-cal-value">0 kcal</div>
+            <div class="stat-label">Logged today</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:var(--water-tint)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--water)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s7 8.2 7 12.5A7 7 0 0 1 5 15.5C5 11.2 12 3 12 3Z"/></svg></div>
+              <span class="stat-trend trend-flat" id="dash-water-trend">0%</span>
+            </div>
+            <div class="stat-value" id="dash-water-value">0 ml</div>
+            <div class="stat-label">Water intake</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:var(--accent-tint)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 11-14h-8l1-6Z"/></svg></div>
+              <span class="stat-trend trend-up" id="dash-streak-trend">🔥</span>
+            </div>
+            <div class="stat-value" id="dash-streak-value">0 days</div>
+            <div class="stat-label">Workout streak</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:#F1EBFE"><svg viewBox="0 0 24 24" fill="none" stroke="var(--fat)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="4" height="10" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="16" y="13" width="4" height="7" rx="1"/></svg></div>
+              <span class="stat-trend trend-flat">this week</span>
+            </div>
+            <div class="stat-value" id="dash-workouts-value">0</div>
+            <div class="stat-label">Workouts completed</div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="card section-card">
+            <div class="section-head">
+              <div class="section-title">Today's Training</div>
+              <a class="section-link" data-view="coach">See all →</a>
+            </div>
+            <div id="today-plan-list"></div>
+          </div>
+
+          <div class="card section-card">
+            <div class="section-head">
+              <div class="section-title">Nutrition Today</div>
+              <a class="section-link" data-view="recipes">Log a meal →</a>
+            </div>
+            <div class="macro-row" id="dash-macros"></div>
+          </div>
+        </div>
+
+        <div class="dash-grid" style="margin-top:16px">
+          <div class="card section-card">
+            <div class="section-head">
+              <div class="section-title">Hydration</div>
+              <a class="section-link" data-view="water">Log water →</a>
+            </div>
+            <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+              <div class="svg-ring" style="width:120px;height:120px">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" stroke="var(--surface-2)" stroke-width="12" fill="none"/>
+                  <circle id="dash-ring-fill" cx="60" cy="60" r="50" stroke="var(--water)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314"/>
+                </svg>
+                <div class="ring-center"><div class="big" id="dash-ring-pct" style="font-size:18px">0%</div></div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:13.5px;color:var(--text-2);margin-bottom:10px" id="dash-water-copy">Log your first glass of water today.</div>
+                <button class="btn btn-primary btn-sm" onclick="quickAddWater(250)">+ 250ml Glass</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card section-card">
+            <div class="section-head">
+              <div class="section-title">Weekly Activity</div>
+            </div>
+            <div class="week-chart" id="dash-week-chart"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ COACH ============ -->
+      <section class="view" id="view-coach">
+        <div class="page-head">
+          <div class="page-title">Coach</div>
+          <div class="page-desc">Structured training programs, picked for your goals.</div>
+        </div>
+
+        <div class="coach-hero">
+          <div class="coach-hero-left">
+            <div class="coach-avatar">🧑‍🏫</div>
+            <div>
+              <div class="coach-hero-title">Coach Amir says: consistency beats intensity.</div>
+              <div class="coach-hero-sub">You've completed <span id="coach-hero-count">0</span> workouts. Ask me anything about training, recovery or nutrition below.</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="scrollToChat()">Ask Coach</button>
+        </div>
+
+        <div class="filter-row" id="coach-filters"></div>
+        <div class="workout-grid" id="workout-grid"></div>
+
+        <div class="card chat-card" id="chat-card">
+          <div class="chat-head">
+            <div class="chat-head-dot"></div>
+            <div style="font-weight:700;font-size:13.5px">AI Coach — live chat</div>
+          </div>
+          <div class="chat-body" id="chat-body"></div>
+          <div class="quick-replies">
+            <button class="quick-reply" onclick="askCoach('Suggest a workout for today')">Suggest a workout</button>
+            <button class="quick-reply" onclick="askCoach('How much protein do I need?')">Protein needs</button>
+            <button class="quick-reply" onclick="askCoach('I am feeling sore')">I'm feeling sore</button>
+            <button class="quick-reply" onclick="askCoach('Motivate me')">Motivate me</button>
+          </div>
+          <div class="chat-input-row">
+            <input class="chat-input" id="chat-input" placeholder="Ask your coach a question…" onkeydown="if(event.key==='Enter')sendChat()">
+            <button class="chat-send" onclick="sendChat()">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 20 18-8L3 4v6l12 2-12 2v6Z"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ RECIPES ============ -->
+      <section class="view" id="view-recipes">
+        <div class="page-head">
+          <div class="page-title">Recipes</div>
+          <div class="page-desc">Meals with clear macros — protein, carbs and fat, at a glance.</div>
+        </div>
+        <div class="filter-row" id="recipe-filters"></div>
+        <div class="recipe-grid" id="recipe-grid"></div>
+      </section>
+
+      <!-- ============ WATER ============ -->
+      <section class="view" id="view-water">
+        <div class="page-head">
+          <div class="page-title">Water Intake</div>
+          <div class="page-desc">Track every glass. Small sips, big impact.</div>
+        </div>
+
+        <div class="water-grid">
+          <div class="card water-ring-card">
+            <div class="svg-ring">
+              <svg width="200" height="200" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="84" stroke="var(--surface-2)" stroke-width="18" fill="none"/>
+                <circle id="water-ring-fill" cx="100" cy="100" r="84" stroke="var(--water)" stroke-width="18" fill="none" stroke-linecap="round" stroke-dasharray="527" stroke-dashoffset="527" style="transition:stroke-dashoffset .5s ease"/>
+              </svg>
+              <div class="ring-center">
+                <div class="big" id="water-ring-value">0 ml</div>
+                <div class="small" id="water-ring-goal">of 2500 ml</div>
+              </div>
+            </div>
+            <div class="quick-add-row">
+              <button class="quick-add-btn" onclick="quickAddWater(250)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3s7 8.2 7 12.5A7 7 0 0 1 5 15.5C5 11.2 12 3 12 3Z"/></svg>
+                +250ml Glass
+              </button>
+              <button class="quick-add-btn" onclick="quickAddWater(500)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3s7 8.2 7 12.5A7 7 0 0 1 5 15.5C5 11.2 12 3 12 3Z"/></svg>
+                +500ml Bottle
+              </button>
+            </div>
+            <div class="custom-add-row">
+              <input type="number" id="custom-water-input" placeholder="Custom amount in ml">
+              <button class="btn btn-ghost" onclick="addCustomWater()">Add</button>
+            </div>
+          </div>
+
+          <div class="card section-card">
+            <div class="section-head">
+              <div class="section-title">Today's Log</div>
+              <span class="section-link" id="water-entry-count">0 entries</span>
+            </div>
+            <div class="log-list" id="water-log-list"></div>
+          </div>
+        </div>
+
+        <div class="card section-card" style="margin-top:16px">
+          <div class="section-head"><div class="section-title">Last 7 Days</div></div>
+          <div class="week-chart" id="water-week-chart"></div>
+        </div>
+      </section>
+
+      <!-- ============ PROFILE ============ -->
+      <section class="view" id="view-profile">
+        <div class="page-head">
+          <div class="page-title">Profile</div>
+          <div class="page-desc">Your goals, your numbers — adjust anytime.</div>
+        </div>
+
+        <div class="profile-grid">
+          <div class="card profile-card">
+            <div class="avatar-lg">RH</div>
+            <div class="profile-name">Rijad Haliti</div>
+            <div class="profile-email">rijadhaliti4@gmail.com</div>
+            <div class="profile-stats">
+              <div><div class="num" id="profile-streak">0</div><div class="lbl">Day streak</div></div>
+              <div><div class="num" id="profile-workouts">0</div><div class="lbl">Workouts</div></div>
+              <div><div class="num" id="profile-recipes">0</div><div class="lbl">Meals logged</div></div>
+            </div>
+          </div>
+
+          <div class="card section-card">
+            <div class="section-title" style="margin-bottom:16px">Daily Goals</div>
+            <div class="form-row">
+              <label>Water goal (ml)</label>
+              <input type="number" id="goal-water" value="2500">
+            </div>
+            <div class="form-row">
+              <label>Calorie goal (kcal)</label>
+              <input type="number" id="goal-calories" value="2200">
+            </div>
+            <div class="form-two">
+              <div class="form-row">
+                <label>Protein (g)</label>
+                <input type="number" id="goal-protein" value="150">
+              </div>
+              <div class="form-row">
+                <label>Carbs (g)</label>
+                <input type="number" id="goal-carbs" value="220">
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Fat (g)</label>
+              <input type="number" id="goal-fat" value="70">
+            </div>
+            <button class="btn btn-primary btn-block" onclick="saveGoals()">Save Goals</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= MOBILE NAV ================= -->
+<nav class="mobile-nav" id="mobile-nav">
+  <a class="mobile-nav-item active" data-view="dashboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+    Home
+  </a>
+  <a class="mobile-nav-item" data-view="coach">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    Coach
+  </a>
+  <a class="mobile-nav-item" data-view="recipes">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V3M8 12v9M18 3c-1.7 0-3 2.2-3 5s1.3 5 3 5v9"/></svg>
+    Recipes
+  </a>
+  <a class="mobile-nav-item" data-view="water">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s7 8.2 7 12.5A7 7 0 0 1 5 15.5C5 11.2 12 3 12 3Z"/></svg>
+    Water
+  </a>
+  <a class="mobile-nav-item" data-view="profile">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>
+    Profile
+  </a>
+</nav>
+
+<!-- ================= WORKOUT MODAL ================= -->
+<div class="overlay" id="workout-overlay">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeModal('workout-overlay')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-media" id="workout-modal-media">🏋️</div>
+    <div class="modal-body">
+      <div class="modal-title" id="workout-modal-title">Workout</div>
+      <div class="modal-sub" id="workout-modal-sub">—</div>
+      <div class="modal-macro-row">
+        <div class="modal-macro"><div class="v" id="workout-modal-duration">—</div><div class="l">MINUTES</div></div>
+        <div class="modal-macro"><div class="v" id="workout-modal-cal">—</div><div class="l">KCAL BURN</div></div>
+        <div class="modal-macro"><div class="v" id="workout-modal-count">—</div><div class="l">EXERCISES</div></div>
+      </div>
+      <div class="modal-section-title">Exercises</div>
+      <div id="workout-modal-exercises"></div>
+      <button class="btn btn-primary btn-block" style="margin-top:18px" id="workout-modal-complete-btn" onclick="completeCurrentWorkout()">Mark Workout Complete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RECIPE MODAL ================= -->
+<div class="overlay" id="recipe-overlay">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeModal('recipe-overlay')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-media" id="recipe-modal-media">🍽️</div>
+    <div class="modal-body">
+      <div class="modal-title" id="recipe-modal-title">Recipe</div>
+      <div class="modal-sub" id="recipe-modal-sub">—</div>
+      <div class="modal-macro-row">
+        <div class="modal-macro"><div class="v" id="recipe-modal-cal">—</div><div class="l">KCAL</div></div>
+        <div class="modal-macro"><div class="v" id="recipe-modal-p">—</div><div class="l">PROTEIN</div></div>
+        <div class="modal-macro"><div class="v" id="recipe-modal-c">—</div><div class="l">CARBS</div></div>
+        <div class="modal-macro"><div class="v" id="recipe-modal-f">—</div><div class="l">FAT</div></div>
+      </div>
+      <div class="modal-section-title">Ingredients</div>
+      <ul class="ingredient-list" id="recipe-modal-ingredients"></ul>
+      <div class="modal-section-title">Instructions</div>
+      <ul class="step-list" id="recipe-modal-steps"></ul>
+      <button class="btn btn-primary btn-block" style="margin-top:18px" onclick="logRecipeToToday()">Add to Today's Log</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+  <span id="toast-text">Saved</span>
+</div>
+
+<script>
+/* ==================== DATA ==================== */
+const WORKOUTS = [
+  {id:'w1',name:'Full Body Power',type:'Strength',level:'Intermediate',emoji:'🏋️',color:'var(--brand-tint)',duration:45,cal:380,
+    exercises:[{n:'Barbell Squat',s:'4 sets × 8 reps'},{n:'Bench Press',s:'4 sets × 8 reps'},{n:'Bent-Over Row',s:'4 sets × 10 reps'},{n:'Plank',s:'3 sets × 45 sec'},{n:'Romanian Deadlift',s:'3 sets × 10 reps'}]},
+  {id:'w2',name:'Upper Body Burn',type:'Strength',level:'Beginner',emoji:'💪',color:'var(--accent-tint)',duration:30,cal:250,
+    exercises:[{n:'Push-ups',s:'3 sets × 12 reps'},{n:'Dumbbell Shoulder Press',s:'3 sets × 10 reps'},{n:'Bicep Curl',s:'3 sets × 12 reps'},{n:'Tricep Dips',s:'3 sets × 12 reps'}]},
+  {id:'w3',name:'HIIT Cardio Blast',type:'Cardio',level:'Advanced',emoji:'🔥',color:'#FEF3E0',duration:25,cal:320,
+    exercises:[{n:'Jump Squats',s:'4 sets × 20 reps'},{n:'Burpees',s:'4 sets × 15 reps'},{n:'Mountain Climbers',s:'4 sets × 30 sec'},{n:'High Knees',s:'4 sets × 30 sec'}]},
+  {id:'w4',name:'Leg Day Foundations',type:'Strength',level:'Intermediate',emoji:'🦵',color:'var(--brand-tint)',duration:40,cal:340,
+    exercises:[{n:'Goblet Squat',s:'4 sets × 12 reps'},{n:'Walking Lunges',s:'3 sets × 20 reps'},{n:'Leg Press',s:'4 sets × 10 reps'},{n:'Calf Raises',s:'3 sets × 15 reps'}]},
+  {id:'w5',name:'Core & Mobility Flow',type:'Mobility',level:'Beginner',emoji:'🧘',color:'#F1EBFE',duration:20,cal:150,
+    exercises:[{n:'Cat-Cow',s:'3 sets × 10 reps'},{n:'Dead Bug',s:'3 sets × 12 reps'},{n:'Side Plank',s:'3 sets × 30 sec'},{n:"World's Greatest Stretch",s:'2 sets × 8 reps'}]},
+  {id:'w6',name:'Endurance Run Prep',type:'Cardio',level:'Intermediate',emoji:'🏃',color:'#FEF3E0',duration:35,cal:300,
+    exercises:[{n:'Interval Sprints',s:'6 × 200m'},{n:'Steady State Jog',s:'15 minutes'},{n:'Dynamic Stretching',s:'5 minutes'}]},
+];
+
+const RECIPES = [
+  {id:'r1',name:'Grilled Chicken & Quinoa Bowl',tag:'High Protein',meal:'Lunch',emoji:'🍗',color:'var(--brand-tint)',time:20,cal:520,p:42,c:48,f:16,
+    ingredients:['200g grilled chicken breast','1 cup cooked quinoa','Cherry tomatoes & cucumber','1 tbsp olive oil + lemon'],
+    steps:['Season and grill the chicken breast until cooked through.','Cook quinoa according to package instructions.','Toss vegetables with olive oil and lemon, then plate together.']},
+  {id:'r2',name:'Greek Yogurt Power Parfait',tag:'High Protein',meal:'Breakfast',emoji:'🥣',color:'var(--water-tint)',time:5,cal:310,p:28,c:34,f:8,
+    ingredients:['1 cup Greek yogurt','1/2 cup granola','Mixed berries','1 tsp honey'],
+    steps:['Layer yogurt, granola and berries in a glass.','Drizzle honey on top.','Serve immediately.']},
+  {id:'r3',name:'Salmon & Sweet Potato',tag:'High Protein',meal:'Dinner',emoji:'🐟',color:'var(--accent-tint)',time:30,cal:560,p:38,c:42,f:22,
+    ingredients:['180g salmon fillet','1 medium sweet potato','Steamed broccoli','1 tbsp olive oil'],
+    steps:['Roast sweet potato cubes at 400°F for 20 minutes.','Pan-sear salmon 4 minutes per side.','Serve with steamed broccoli.']},
+  {id:'r4',name:'Veggie Tofu Stir-Fry',tag:'Vegan',meal:'Dinner',emoji:'🥦',color:'var(--brand-tint)',time:25,cal:410,p:22,c:48,f:14,
+    ingredients:['200g firm tofu','Mixed stir-fry vegetables','2 tbsp soy sauce','1 cup brown rice'],
+    steps:['Press and cube tofu, pan-fry until golden.','Stir-fry vegetables with soy sauce.','Combine with tofu and serve over brown rice.']},
+  {id:'r5',name:'Protein Overnight Oats',tag:'High Protein',meal:'Breakfast',emoji:'🥄',color:'var(--water-tint)',time:5,cal:380,p:26,c:52,f:9,
+    ingredients:['1/2 cup rolled oats','1 scoop protein powder','1 cup almond milk','1 tbsp chia seeds'],
+    steps:['Mix all ingredients in a jar.','Refrigerate overnight.','Stir and enjoy cold in the morning.']},
+  {id:'r6',name:'Turkey Lettuce Wraps',tag:'Low Carb',meal:'Lunch',emoji:'🥬',color:'#FEF3E0',time:15,cal:340,p:34,c:12,f:16,
+    ingredients:['200g ground turkey','Butter lettuce leaves','Diced peppers & onion','Light soy sauce'],
+    steps:['Brown turkey with peppers and onion.','Season with soy sauce.','Spoon into lettuce leaves and serve.']},
+  {id:'r7',name:'Berry Almond Smoothie',tag:'Vegan',meal:'Snack',emoji:'🥤',color:'#FDE8F3',time:5,cal:280,p:12,c:38,f:9,
+    ingredients:['1 cup mixed berries','1 tbsp almond butter','1 cup almond milk','1/2 banana'],
+    steps:['Add all ingredients to a blender.','Blend until smooth.','Pour and serve chilled.']},
+  {id:'r8',name:'Egg White Veggie Omelette',tag:'Low Carb',meal:'Breakfast',emoji:'🍳',color:'#FEF3E0',time:12,cal:260,p:24,c:10,f:12,
+    ingredients:['6 egg whites','Spinach, peppers, onion','1/4 cup feta cheese','Salt & pepper'],
+    steps:['Whisk egg whites with salt and pepper.','Sauté vegetables, then pour eggs over.','Fold, top with feta, and cook until set.']},
+];
+
+const COACH_REPLIES = [
+  {k:['protein'],a:"Aim for roughly 1.6–2.2g of protein per kg of bodyweight if you're training regularly. Check the Recipes tab — I've tagged everything 'High Protein' for you."},
+  {k:['sore','pain','hurt'],a:"Muscle soreness after training is normal (DOMS). Prioritize sleep, stay hydrated, and try a Mobility Flow session instead of skipping training entirely."},
+  {k:['motivat','tired','lazy'],a:"You don't need motivation, you need momentum. Do 5 minutes — you can always stop after that. Most days you won't want to."},
+  {k:['workout','suggest','today','plan'],a:"Based on your recent activity, I'd suggest Full Body Power today — balanced strength work at 45 minutes. Want me to open it?"},
+  {k:['water','hydrat'],a:"Aim for 2.5–3L a day, more on training days. Try spacing 2–3 glasses around each meal so it's not all at once."},
+  {k:['carb','carbs'],a:"Carbs fuel your training — don't fear them. Time the bulk of your carbs around your workouts for best performance and recovery."},
+  {k:['weight','lose','fat'],a:"Sustainable fat loss comes from a modest calorie deficit (~300-500 kcal/day) plus consistent strength training to preserve muscle."},
+  {k:['sleep','rest'],a:"7–9 hours is where the real recovery happens. Training breaks the muscle down — sleep is what rebuilds it stronger."},
+];
+
+/* ==================== STATE ==================== */
+const todayISO = () => new Date().toISOString().slice(0,10);
+const STORE_KEY = 'pulse_state_v1';
+
+function loadState(){
+  const raw = localStorage.getItem(STORE_KEY);
+  const base = {
+    goals:{water:2500,calories:2200,protein:150,carbs:220,fat:70},
+    waterLog:[],
+    nutritionLog:[],
+    completedExercises:{},
+    completedWorkouts:{},
+    streak:0,
+    lastCompletedDate:null,
+  };
+  if(!raw) return base;
+  try{ return Object.assign(base, JSON.parse(raw)); }catch(e){ return base; }
+}
+function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+let state = loadState();
+
+/* ==================== NAV ==================== */
+function setView(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
+  document.querySelectorAll('.mobile-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-view]').forEach(el=>{
+  el.addEventListener('click', e=>{ e.preventDefault(); setView(el.dataset.view); });
+});
+
+/* ==================== TOAST ==================== */
+let toastTimer;
+function showToast(text){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-text').textContent = text;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+/* ==================== GREETING ==================== */
+function renderGreeting(){
+  const h = new Date().getHours();
+  const period = h<12?'morning':h<18?'afternoon':'evening';
+  document.getElementById('greeting-text').textContent = `Good ${period}, Rijad 👋`;
+  document.getElementById('greeting-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+}
+
+/* ==================== WATER ==================== */
+function todayWaterEntries(){
+  return state.waterLog.filter(e=>e.date===todayISO());
+}
+function todayWaterTotal(){
+  return todayWaterEntries().reduce((s,e)=>s+e.amount,0);
+}
+function quickAddWater(amount){
+  state.waterLog.push({id:Date.now(), amount, date:todayISO(), time:new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})});
+  saveState();
+  renderWater(); renderDashboard();
+  showToast(`+${amount}ml logged 💧`);
+}
+function addCustomWater(){
+  const input = document.getElementById('custom-water-input');
+  const val = parseInt(input.value,10);
+  if(!val || val<=0) return;
+  quickAddWater(val);
+  input.value='';
+}
+function deleteWaterEntry(id){
+  state.waterLog = state.waterLog.filter(e=>e.id!==id);
+  saveState();
+  renderWater(); renderDashboard();
+}
+function last7Days(){
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d = new Date();
+    d.setDate(d.getDate()-i);
+    days.push(d.toISOString().slice(0,10));
+  }
+  return days;
+}
+function renderWater(){
+  const goal = state.goals.water;
+  const total = todayWaterTotal();
+  const pct = Math.min(100, Math.round((total/goal)*100));
+  const circumference = 527;
+  document.getElementById('water-ring-fill').style.strokeDashoffset = circumference - (circumference*pct/100);
+  document.getElementById('water-ring-value').textContent = `${total} ml`;
+  document.getElementById('water-ring-goal').textContent = `of ${goal} ml`;
+
+  const entries = todayWaterEntries().slice().reverse();
+  document.getElementById('water-entry-count').textContent = `${entries.length} entries`;
+  const list = document.getElementById('water-log-list');
+  list.innerHTML = entries.length ? entries.map(e=>`
+    <div class="log-item">
+      <div class="log-drop"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3s7 8.2 7 12.5A7 7 0 0 1 5 15.5C5 11.2 12 3 12 3Z"/></svg></div>
+      <div><div class="log-amount">${e.amount} ml</div><div class="log-time">${e.time}</div></div>
+      <button class="log-del" onclick="deleteWaterEntry(${e.id})">×</button>
+    </div>`).join('') : '<div class="empty-log">No water logged yet today. Tap a quick-add button above.</div>';
+
+  const days = last7Days();
+  const chartHtml = days.map(d=>{
+    const total = state.waterLog.filter(e=>e.date===d).reduce((s,e)=>s+e.amount,0);
+    const h = Math.max(4, Math.min(100, Math.round((total/goal)*100)));
+    const label = new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'short'})[0];
+    return `<div class="week-col"><div class="week-bar-track"><div class="week-bar-fill" style="height:${h}%"></div></div><div class="week-label">${label}</div></div>`;
+  }).join('');
+  document.getElementById('water-week-chart').innerHTML = chartHtml;
+  document.getElementById('dash-week-chart').innerHTML = chartHtml;
+
+  document.getElementById('nav-water-badge').textContent = `${pct}%`;
+}
+
+/* ==================== COACH / WORKOUTS ==================== */
+let currentWorkoutId = null;
+const coachFilters = ['All','Strength','Cardio','Mobility'];
+let activeCoachFilter = 'All';
+
+function renderCoachFilters(){
+  document.getElementById('coach-filters').innerHTML = coachFilters.map(f=>
+    `<button class="filter-chip ${f===activeCoachFilter?'active':''}" onclick="setCoachFilter('${f}')">${f}</button>`
+  ).join('');
+}
+function setCoachFilter(f){ activeCoachFilter = f; renderCoachFilters(); renderWorkouts(); }
+
+function isWorkoutDoneToday(id){
+  return state.completedWorkouts[id] === todayISO();
+}
+function renderWorkouts(){
+  const list = activeCoachFilter==='All' ? WORKOUTS : WORKOUTS.filter(w=>w.type===activeCoachFilter);
+  document.getElementById('workout-grid').innerHTML = list.map(w=>`
+    <div class="card workout-card" onclick="openWorkout('${w.id}')">
+      <div class="workout-top">
+        <div class="workout-emoji" style="background:${w.color}">${w.emoji}</div>
+        ${isWorkoutDoneToday(w.id) ? '<span class="workout-complete-tag">✓ Done today</span>' : ''}
+      </div>
+      <div>
+        <div class="workout-name">${w.name}</div>
+        <div class="workout-tags" style="margin-top:6px">
+          <span class="pill" style="background:var(--surface-2);color:var(--text-2)">${w.type}</span>
+          <span class="pill" style="background:var(--surface-2);color:var(--text-2)">${w.level}</span>
+        </div>
+      </div>
+      <div class="workout-meta">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>${w.duration} min</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2 3 14h7l-1 8 11-14h-8l1-6Z"/></svg>${w.cal} kcal</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="10" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/></svg>${w.exercises.length}</span>
+      </div>
+    </div>`).join('');
+}
+function openWorkout(id){
+  currentWorkoutId = id;
+  const w = WORKOUTS.find(x=>x.id===id);
+  document.getElementById('workout-modal-media').textContent = w.emoji;
+  document.getElementById('workout-modal-media').style.background = w.color;
+  document.getElementById('workout-modal-title').textContent = w.name;
+  document.getElementById('workout-modal-sub').textContent = `${w.type} · ${w.level}`;
+  document.getElementById('workout-modal-duration').textContent = w.duration;
+  document.getElementById('workout-modal-cal').textContent = w.cal;
+  document.getElementById('workout-modal-count').textContent = w.exercises.length;
+
+  const done = state.completedExercises[todayKeyFor(id)] || [];
+  document.getElementById('workout-modal-exercises').innerHTML = w.exercises.map((ex,i)=>`
+    <div class="exercise-row">
+      <div class="chk ${done.includes(i)?'done':''}" onclick="toggleExercise(${i})">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <div><div class="exercise-name">${ex.n}</div><div class="exercise-sets">${ex.s}</div></div>
+    </div>`).join('');
+
+  const btn = document.getElementById('workout-modal-complete-btn');
+  btn.textContent = isWorkoutDoneToday(id) ? 'Completed Today ✓' : 'Mark Workout Complete';
+  document.getElementById('workout-overlay').classList.add('active');
+}
+function todayKeyFor(workoutId){ return `${workoutId}_${todayISO()}`; }
+function toggleExercise(i){
+  const key = todayKeyFor(currentWorkoutId);
+  const list = state.completedExercises[key] || [];
+  const idx = list.indexOf(i);
+  if(idx>-1) list.splice(idx,1); else list.push(i);
+  state.completedExercises[key] = list;
+  saveState();
+  openWorkout(currentWorkoutId);
+}
+function completeCurrentWorkout(){
+  if(!currentWorkoutId) return;
+  if(isWorkoutDoneToday(currentWorkoutId)){ closeModal('workout-overlay'); return; }
+  state.completedWorkouts[currentWorkoutId] = todayISO();
+  bumpStreak();
+  saveState();
+  closeModal('workout-overlay');
+  renderWorkouts(); renderDashboard(); renderProfile();
+  showToast('Workout complete! Great work 💪');
+}
+function bumpStreak(){
+  const today = todayISO();
+  if(state.lastCompletedDate===today) return;
+  const yesterday = new Date(Date.now()-86400000).toISOString().slice(0,10);
+  state.streak = (state.lastCompletedDate===yesterday) ? state.streak+1 : 1;
+  state.lastCompletedDate = today;
+}
+function todaysWorkout(){
+  const dayIndex = Math.floor(Date.now()/86400000) % WORKOUTS.length;
+  return WORKOUTS[dayIndex];
+}
+
+/* ==================== CHAT ==================== */
+function renderChat(){
+  document.getElementById('chat-body').innerHTML = `<div class="msg coach">Hey Rijad — I'm your AI coach. Ask me about workouts, nutrition, or recovery, or tap a quick reply below.</div>`;
+}
+function scrollToChat(){ document.getElementById('chat-card').scrollIntoView({behavior:'smooth', block:'center'}); setView('coach'); }
+function askCoach(text){
+  addMsg(text,'user');
+  const lower = text.toLowerCase();
+  let reply = COACH_REPLIES.find(r=>r.k.some(k=>lower.includes(k)));
+  setTimeout(()=>{
+    addMsg(reply ? reply.a : "Great question. Stay consistent with training, prioritize protein and sleep, and the results will follow — check the Coach and Recipes tabs for a plan.", 'coach');
+  }, 450);
+}
+function sendChat(){
+  const input = document.getElementById('chat-input');
+  const val = input.value.trim();
+  if(!val) return;
+  askCoach(val);
+  input.value='';
+}
+function addMsg(text, who){
+  const body = document.getElementById('chat-body');
+  const div = document.createElement('div');
+  div.className = `msg ${who}`;
+  div.textContent = text;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+}
+
+/* ==================== RECIPES ==================== */
+const recipeFilters = ['All','High Protein','Low Carb','Vegan','Breakfast','Lunch','Dinner','Snack'];
+let activeRecipeFilter = 'All';
+let currentRecipeId = null;
+
+function renderRecipeFilters(){
+  document.getElementById('recipe-filters').innerHTML = recipeFilters.map(f=>
+    `<button class="filter-chip ${f===activeRecipeFilter?'active':''}" onclick="setRecipeFilter('${f}')">${f}</button>`
+  ).join('');
+}
+function setRecipeFilter(f){ activeRecipeFilter=f; renderRecipeFilters(); renderRecipes(); }
+function renderRecipes(){
+  const list = activeRecipeFilter==='All' ? RECIPES : RECIPES.filter(r=>r.tag===activeRecipeFilter || r.meal===activeRecipeFilter);
+  document.getElementById('recipe-grid').innerHTML = list.map(r=>`
+    <div class="card recipe-card" onclick="openRecipe('${r.id}')">
+      <div class="recipe-media" style="background:${r.color}">${r.emoji}</div>
+      <div class="recipe-body">
+        <div class="recipe-name">${r.name}</div>
+        <div class="recipe-meta">${r.meal} · ${r.time} min · ${r.cal} kcal</div>
+        <div class="recipe-macros">
+          <span class="macro-tag p">P ${r.p}g</span>
+          <span class="macro-tag c">C ${r.c}g</span>
+          <span class="macro-tag f">F ${r.f}g</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function openRecipe(id){
+  currentRecipeId = id;
+  const r = RECIPES.find(x=>x.id===id);
+  document.getElementById('recipe-modal-media').textContent = r.emoji;
+  document.getElementById('recipe-modal-media').style.background = r.color;
+  document.getElementById('recipe-modal-title').textContent = r.name;
+  document.getElementById('recipe-modal-sub').textContent = `${r.meal} · ${r.tag} · ${r.time} min`;
+  document.getElementById('recipe-modal-cal').textContent = r.cal;
+  document.getElementById('recipe-modal-p').textContent = r.p+'g';
+  document.getElementById('recipe-modal-c').textContent = r.c+'g';
+  document.getElementById('recipe-modal-f').textContent = r.f+'g';
+  document.getElementById('recipe-modal-ingredients').innerHTML = r.ingredients.map(i=>`<li>• ${i}</li>`).join('');
+  document.getElementById('recipe-modal-steps').innerHTML = r.steps.map((s,i)=>`<li><span class="step-num">${i+1}</span>${s}</li>`).join('');
+  document.getElementById('recipe-overlay').classList.add('active');
+}
+function logRecipeToToday(){
+  const r = RECIPES.find(x=>x.id===currentRecipeId);
+  state.nutritionLog.push({id:Date.now(), recipeId:r.id, name:r.name, cal:r.cal, p:r.p, c:r.c, f:r.f, date:todayISO()});
+  saveState();
+  closeModal('recipe-overlay');
+  renderDashboard(); renderProfile();
+  showToast(`${r.name} added to today's log 🍽️`);
+}
+
+/* ==================== MODAL ==================== */
+function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('active'); });
+});
+
+/* ==================== DASHBOARD ==================== */
+function todayNutritionTotals(){
+  return state.nutritionLog.filter(n=>n.date===todayISO()).reduce((acc,n)=>{
+    acc.cal+=n.cal; acc.p+=n.p; acc.c+=n.c; acc.f+=n.f; return acc;
+  }, {cal:0,p:0,c:0,f:0});
+}
+function renderDashboard(){
+  const totals = todayNutritionTotals();
+  const goals = state.goals;
+
+  document.getElementById('dash-cal-value').textContent = `${totals.cal} kcal`;
+  document.getElementById('dash-cal-trend').textContent = totals.cal <= goals.calories ? 'on track' : 'over goal';
+
+  const waterTotal = todayWaterTotal();
+  const waterPct = Math.min(100, Math.round((waterTotal/goals.water)*100));
+  document.getElementById('dash-water-value').textContent = `${waterTotal} ml`;
+  document.getElementById('dash-water-trend').textContent = `${waterPct}%`;
+  document.getElementById('dash-water-copy').textContent = waterTotal>0
+    ? `You're at ${waterPct}% of your ${goals.water}ml goal.`
+    : 'Log your first glass of water today.';
+  const circumference = 314;
+  document.getElementById('dash-ring-fill').style.strokeDashoffset = circumference - (circumference*waterPct/100);
+  document.getElementById('dash-ring-pct').textContent = `${waterPct}%`;
+
+  document.getElementById('dash-streak-value').textContent = `${state.streak} days`;
+
+  const completedTodayCount = Object.entries(state.completedWorkouts).filter(([k,v])=>{
+    const d = new Date(); const weekAgo = new Date(); weekAgo.setDate(d.getDate()-7);
+    return new Date(v) >= weekAgo;
+  }).length;
+  document.getElementById('dash-workouts-value').textContent = completedTodayCount;
+
+  const macros = [
+    {label:'Protein', val:totals.p, goal:goals.protein, color:'var(--protein)'},
+    {label:'Carbs', val:totals.c, goal:goals.carbs, color:'var(--carbs)'},
+    {label:'Fat', val:totals.f, goal:goals.fat, color:'var(--fat)'},
+  ];
+  document.getElementById('dash-macros').innerHTML = macros.map(m=>`
+    <div class="macro-item">
+      <div class="macro-top"><span>${m.label}</span><span style="color:var(--text-2)">${m.val}g / ${m.goal}g</span></div>
+      <div class="macro-bar"><div class="macro-bar-fill" style="width:${Math.min(100,(m.val/m.goal)*100)}%;background:${m.color}"></div></div>
+    </div>`).join('');
+
+  const w = todaysWorkout();
+  const done = state.completedExercises[todayKeyFor(w.id)] || [];
+  document.getElementById('today-plan-list').innerHTML = w.exercises.map((ex,i)=>`
+    <div class="today-plan-item">
+      <div class="chk ${done.includes(i)?'done':''}" onclick="toggleDashExercise('${w.id}',${i})">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <div>
+        <div class="plan-item-name ${done.includes(i)?'done':''}">${ex.n}</div>
+        <div class="plan-item-meta">${ex.s}</div>
+      </div>
+    </div>`).join('') + `<button class="btn btn-outline btn-block" style="margin-top:10px" onclick="openWorkout('${w.id}')">Open ${w.name} →</button>`;
+
+  document.getElementById('coach-hero-count').textContent = Object.keys(state.completedWorkouts).length;
+}
+function toggleDashExercise(workoutId,i){
+  const key = todayKeyFor(workoutId);
+  const list = state.completedExercises[key] || [];
+  const idx = list.indexOf(i);
+  if(idx>-1) list.splice(idx,1); else list.push(i);
+  state.completedExercises[key] = list;
+  saveState();
+  renderDashboard();
+}
+
+/* ==================== PROFILE ==================== */
+function renderProfile(){
+  document.getElementById('profile-streak').textContent = state.streak;
+  document.getElementById('profile-workouts').textContent = Object.keys(state.completedWorkouts).length;
+  document.getElementById('profile-recipes').textContent = state.nutritionLog.length;
+  document.getElementById('goal-water').value = state.goals.water;
+  document.getElementById('goal-calories').value = state.goals.calories;
+  document.getElementById('goal-protein').value = state.goals.protein;
+  document.getElementById('goal-carbs').value = state.goals.carbs;
+  document.getElementById('goal-fat').value = state.goals.fat;
+}
+function saveGoals(){
+  state.goals = {
+    water: parseInt(document.getElementById('goal-water').value,10) || 2500,
+    calories: parseInt(document.getElementById('goal-calories').value,10) || 2200,
+    protein: parseInt(document.getElementById('goal-protein').value,10) || 150,
+    carbs: parseInt(document.getElementById('goal-carbs').value,10) || 220,
+    fat: parseInt(document.getElementById('goal-fat').value,10) || 70,
+  };
+  saveState();
+  renderDashboard(); renderWater();
+  showToast('Goals updated ✓');
+}
+
+/* ==================== SIDEBAR STREAK ==================== */
+function renderStreak(){
+  document.getElementById('streak-num').textContent = `${state.streak} day streak`;
+}
+
+/* ==================== INIT ==================== */
+function init(){
+  renderGreeting();
+  renderCoachFilters();
+  renderRecipeFilters();
+  renderWorkouts();
+  renderRecipes();
+  renderChat();
+  renderWater();
+  renderDashboard();
+  renderProfile();
+  renderStreak();
+}
+init();
+</script>
+</body>
+</html>
